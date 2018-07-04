@@ -1,0 +1,6 @@
+<!-- Generated template for the MovieTileComponent component -->
+<div>
+  <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + movie.poster_path"/>
+  <img *ngIf="!movie.poster_path" src="/assets/imgs/noImage.png"/>
+  <p>{{movie.title}}</p>
+</div>

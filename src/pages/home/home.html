@@ -1,14 +1,32 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      To Watch List
     </ion-title>
+    <ion-buttons end>
+      <button *ngIf="!(afAuth.authState | async)" ion-button icon-only (click)="login()">
+        <ion-icon name="logo-google"></ion-icon>
+      </button>
+      <img *ngIf="afAuth.auth.currentUser" [src]="afAuth.auth.currentUser.photoURL" width="30px" style="display:inline-block" height="30px" class="nav-avatar"/>
+      <button *ngIf="(afAuth.authState | async)" ion-button icon-only (click)="logout()">
+        <ion-icon name="exit"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
+  <ion-searchbar [(ngModel)]="search_title" [showCancelButton]="true" (ionInput)="onSearch($event)" (ionCancel)="onSearchCancel($event)">
+  </ion-searchbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let movie of movies" col-6 col-md-4 col-lg-3>
+        <movie-tile [movie]="movie" (click)="navigateToMovie($event, movie.id)"></movie-tile>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <h3 *ngIf="!search_title" ion-text padding text-center color="gray">Type in search bar to search a movie...</h3>
+  <ion-infinite-scroll *ngIf="page && page != pages" (ionInfinite)="onLoadMore($event)">
+    <ion-infinite-scroll-content loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
